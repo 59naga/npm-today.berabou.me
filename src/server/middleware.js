@@ -1,16 +1,10 @@
-'use strict';
+import Bluebird from 'bluebird';
+import fetch from 'node-fetch';
+import path from 'path';
+import fsOrigin from 'fs';
+import express from 'express';
 
-// Dependencies
-const Bluebird = require('bluebird');
-const express = require('express');
-const cors = require('cors');
-const compression = require('compression');
-const fetch = require('node-fetch');
-const fs = Bluebird.promisifyAll(require('fs'));
-const path = require('path');
-
-// Environment
-const port = process.env.PORT || 59798;
+const fs = Bluebird.promisifyAll(fsOrigin);
 
 /**
 * return lastday of api.npmjs
@@ -18,7 +12,7 @@ const port = process.env.PORT || 59798;
 * @function fetchStats
 * @return {promise<string>} lastday
 */
-const fetchLastDay = () => (
+export const fetchLastDay = () => (
   fetch('https://api.npmjs.org/downloads/point/last-day/')
   .then((response) => response.json())
   .then((data) => data.start)
@@ -32,7 +26,7 @@ const fetchLastDay = () => (
 * @param {string} period - See https://github.com/npm/download-counts#point-values
 * @return {array<promise>} stats
 */
-const fetchStats = (pkgs, period) => (
+export const fetchStats = (pkgs, period) => (
   Bluebird.all(pkgs.map((pkg) => {
     const stat = Object.assign({
       downloads: 0,
@@ -62,9 +56,9 @@ const fetchStats = (pkgs, period) => (
 * @param {object} [options.removeYesterday] - remove yesterday data using downloadStatsCache
 * @return {promise<undefined>}
 */
-let downloadStatsCache = {};
-const downloadStatsURL = 'https://registry.npmjs.org/-/all/static/today.json';
-const downloadStats = (fileName, period, options) => {
+export let downloadStatsCache = {};
+export const downloadStatsURL = 'https://registry.npmjs.org/-/all/static/today.json';
+export const downloadStats = (fileName, period, options) => {
   const currentCache = Object.keys(downloadStatsCache)[0];
   if (currentCache !== period) {
     downloadStatsCache = {};
@@ -117,7 +111,7 @@ const downloadStats = (fileName, period, options) => {
 * @param {string} fileName
 * @return {promise} - fulfill is file sended, reject is not exists
 */
-const sendFile = (res, fileName) => (
+export const sendFile = (res, fileName) => (
   fs.statAsync(fileName)
   .then(() => {
     res.sendFile(fileName);
@@ -133,11 +127,11 @@ const sendFile = (res, fileName) => (
 * @param {object} [options.removeYesterday] - remove json yesterday data
 * @return {express.Router}
 */
-const npmToday = (options) => {
+export default (options = {}) => {
   const opts = Object.assign({
     cwd: process.cwd(),
     removeYesterday: true,
-  }, options || {});
+  }, options);
   const middleware = express.Router();
 
   middleware.use((req, res) => {
@@ -163,19 +157,3 @@ const npmToday = (options) => {
 
   return middleware;
 };
-
-// Routes
-if (module.parent === null) {
-  const app = express();
-  app.disable('x-powered-by');
-  app.use(cors());
-  app.use(compression());
-
-  app.get('/', (req, res) => {
-    res.redirect('https://github.com/59naga/npm-today.berabou.me#readme');
-  });
-  app.get('/downloads', npmToday());
-  app.listen(port, () => {
-    console.log(`npm-today is available on http://localhost:${port}!`);
-  });
-}

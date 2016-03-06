@@ -1,0 +1,45 @@
+import webpack from 'webpack';
+import path from 'path';
+
+const filename = 'bundle.min.js';
+const config = {
+  entry: './src/client/index.js',
+  output: {
+    filename,
+    path: path.join(__dirname, 'public'),
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel',
+      },
+      {
+        test: /\.styl$/,
+        loader: 'style!css?sourceMap!stylus',
+      },
+    ],
+  },
+
+  devServer: {
+    filename,
+    port: 59798,
+    quiet: true,
+    contentBase: 'public',
+  },
+};
+
+switch (process.env.npm_lifecycle_event) {
+  case 'build':
+    config.plugins = [
+      new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
+    ];
+    break;
+
+  default:
+    config.devtool = '#source-map';
+
+}
+
+export default config;
