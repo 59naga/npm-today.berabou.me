@@ -1,0 +1,9 @@
+---
+extends: airbnb/base
+parser: babel-eslint
+
+env:
+  node: true
+
+rules:
+  new-cap: [2, {"capIsNewExceptions": ["express.Router"]}]
