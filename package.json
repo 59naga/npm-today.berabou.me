@@ -1,6 +1,6 @@
 {
   "name": "npm-today",
-  "main": "npm-today.berabou.me.js",
+  "main": "lib/server/index.js",
   "private": true,
   "scripts": {
     "postinstall": "npm-run-all --parallel compile build",

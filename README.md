@@ -7,6 +7,12 @@ API URL Format
 
 Development
 ---
+
+Requirement global
+* NodeJS v5.7.0
+* Npm v3.7.1
+* Babel-cli v6.5.1 (babel-core v6.5.2)
+
 ```bash
 git clone https://github.com/59naga/npm-today.berabou.me
 cd npm-today.berabou.me
