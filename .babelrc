@@ -6,5 +6,12 @@
   "plugins": [
     "transform-function-bind",
     "add-module-exports"
-  ]
+  ],
+  "env": {
+    "production": {
+      "plugins": [
+        "transform-inline-environment-variables"
+      ]
+    }
+  }
 }
