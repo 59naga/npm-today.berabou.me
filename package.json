@@ -1,0 +1,14 @@
+{
+  "name": "npm-today",
+  "main": "npm-today.berabou.me.js",
+  "scripts": {
+    "start": "node npm-today.berabou.me"
+  },
+  "dependencies": {
+    "bluebird": "^3.3.3",
+    "compression": "^1.6.1",
+    "cors": "^2.7.1",
+    "express": "^4.13.4",
+    "node-fetch": "^1.3.3"
+  }
+}
