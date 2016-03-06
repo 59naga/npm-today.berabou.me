@@ -1,4 +1,4 @@
-[npm-today.berabou.me](https://npm-today.berabou.me/)
+[npm-today.berabou.me](http://npm-today.berabou.me/)
 ---
 
 URL Format
