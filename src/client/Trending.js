@@ -88,7 +88,7 @@ export default class Trending extends React.Component {
         />
         <List style={{ marginTop: '64px' }}>
           <Paper style={{ margin: '1em 2em' }} zDepth={1}>
-            {createResult(this.state.packages)}
+            {createResult(this.state.packages, this.state)}
           </Paper>
         </List>
       </div>
