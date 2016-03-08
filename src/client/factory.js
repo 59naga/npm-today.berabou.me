@@ -7,11 +7,10 @@ import { CircularProgress } from 'material-ui';
 
 /**
 * @param {object} pkg - package infomation chunk using `today.json`
-* @param {object} [options]
 * @return {string} maintaners string
 * @see https://registry.npmjs.org/-/all/static/today.json
 */
-export function getMaintainers(pkg, options = {}) {
+export function getMaintainers(pkg) {
   if (pkg.maintainers) {
     return pkg.maintainers.map((maintainer) => {
       if (typeof maintainer === 'string') {
