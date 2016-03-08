@@ -13,7 +13,7 @@ const fs = Bluebird.promisifyAll(fsOrigin);
 * @return {promise<string>} lastday
 */
 export const fetchLastDay = () => (
-  fetch('https://api.npmjs.org/downloads/point/last-day/')
+  fetch('https://api.npmjs.org/downloads/point/last-day/',{compress:false})
   .then((response) => response.json())
   .then((data) => data.start)
 );
