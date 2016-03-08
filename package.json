@@ -8,6 +8,7 @@
     "compile": "babel src/server --out-dir lib/server",
     "build": "webpack # compile src/client to public/bundle.min.js",
     "lint-fix": "eslint src --fix",
+    "changelog": "conventional-changelog --release-count 0 --infile CHANGELOG.md --same-file",
     "dev": "npm-run-all --parallel dev:*",
     "dev:open": "wait-on http://localhost:59798/ && open http://localhost:59798/",
     "dev:server": "webpack-dev-server --hot --inline"
@@ -44,6 +45,7 @@
     "stylus-loader": "^1.5.1",
     "wait-on": "^1.4.0",
     "webpack": "^1.12.14",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "conventional-changelog-cli": "^1.1.1"
   }
 }
