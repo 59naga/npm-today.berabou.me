@@ -1,9 +1,12 @@
 ---
 extends: airbnb
 parser: babel-eslint
-
-env:
-  node: true
+plugins:
+  - mocha
 
 rules:
   new-cap: [2, {"capIsNewExceptions": ["express.Router"]}]
+
+env:
+  node: true
+  mocha: true

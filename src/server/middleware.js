@@ -3,6 +3,9 @@ import fetch from 'node-fetch';
 import path from 'path';
 import fsOrigin from 'fs';
 import express from 'express';
+import moment from 'moment';
+import request from 'request';
+import JSONStream from 'JSONStream';
 
 const fs = Bluebird.promisifyAll(fsOrigin);
 
@@ -17,6 +20,115 @@ export const fetchLastDay = () => (
   .then((response) => response.json())
   .then((data) => data.start)
 );
+
+/**
+* return lastday of api.npmjs
+*
+* @function createBulkQueue
+* @return {promise<object>} package download counts
+*/
+export const createBulkQueue = (names) => (
+  fetch(`https://api.npmjs.org/downloads/point/last-day/${encodeURIComponent(names.join(','))}`)
+  .then((response) => {
+    if (response.error) {
+      return {};// {"error":"no stats for this package for this period (0002)"}
+    }
+
+    // パッケージ名をカンマで区切るとjsonの書式が変わるので、カンマ区切りの時の書式に合わせる
+    if (names.length === 1) {
+      return response.json()
+      .then((fields) => ({ [fields.package]: fields }));
+    }
+
+    return response.json();
+  })
+);
+
+/**
+* returns the package names
+* @returns {promise<array<object>} info
+*/
+export const fetchPackages = (ymd) => {
+  const startkey = moment.utc(ymd).startOf('day')._d.getTime();
+  const endkey = moment.utc(ymd).endOf('day')._d.getTime();
+  const url = `https://skimdb.npmjs.com/-/all/since?stale=update_after&startkey=${startkey}&endkey=${endkey}`;
+
+  const index = {};
+  const summaries = [];
+  const step = 10;
+  const limit = 99999;
+  const blukQueues = [];
+  let pendingNames = [];
+  return new Bluebird((resolve) => {
+    // npmのdbから変更日を元にパッケージ情報を取得
+    // see: https://github.com/bitinn/node-fetch/issues/15
+    request(url, {
+      headers: { host: 'registry.npmjs.org' },
+      agentOptions: {
+        rejectUnauthorized: false,
+      },
+    })
+    .pipe(JSONStream.parse('*'))
+    .on('data', (data) => {
+      if (data.name === undefined) {
+        return;
+      }
+      if (summaries.length > limit) {
+        return;
+      }
+
+      // 検索や表示に使用しない情報(urlやnpm-scriptsなど)を除外
+      const { name, description, author, maintainers, keywords } = data;
+      summaries.push({
+        name,
+        description,
+        author,
+        maintainers,
+        keywords,
+        downloads: 0,
+      });
+      index[name] = summaries.length - 1;
+
+      // step件数溜まったらリクエストを発行
+      pendingNames.push(name);
+      if (pendingNames.length >= step) {
+        blukQueues.push(createBulkQueue(pendingNames));
+        pendingNames = [];
+      }
+    })
+    .on('end', () => {
+      // 未解消のリクエストを開放
+      if (pendingNames.length) {
+        blukQueues.push(createBulkQueue(pendingNames));
+        pendingNames = [];
+      }
+
+      // 全てのリクエストが終了したらパッケージ情報とマージ
+      // ダウンロード数がないものは除外する
+      Bluebird.all(blukQueues)
+      .then((jsons) => {
+        const stats = [];
+        jsons.forEach((json) => {
+          for (const key in json) {
+            if (json.hasOwnProperty(key) === false) {
+              continue;
+            }
+
+            const stat = json[key];
+            const summary = summaries[index[key]];
+            if (summary) {
+              summary.downloads = stat.downloads;
+              stats.push(summary);
+            }
+          }
+        });
+
+        // ダウンロード数があるものだけ返す
+        resolve(stats);
+      });
+    });
+  });
+};
 
 /**
 * return stat json list
