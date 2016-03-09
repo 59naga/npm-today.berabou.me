@@ -50,7 +50,7 @@ export function createResult(packages, options = {}) {
   let total = 0;
   let count = 0;
   const listItems = [];
-  packages.slice(0, 10).forEach((pkg, i) => {
+  packages.forEach((pkg, i) => {
     total += pkg.downloads;
     if (pkg.downloads <= 0) {
       return undefined;
