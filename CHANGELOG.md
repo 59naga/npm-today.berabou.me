@@ -1,6 +1,9 @@
 <a name=""></a>
-#  (2016-03-08)
+#  (2016-03-10)
 
+* perf: use gzipped json and bulk queries ([241bb7d](https://github.com/beraboume/npm-today.berabou.me/commit/241bb7d))
+* style: add a:visited with `color #aaa` ([bf9124d](https://github.com/beraboume/npm-today.berabou.me/commit/bf9124d))
+* docs: add conventional-changelog ([b375f2d](https://github.com/beraboume/npm-today.berabou.me/commit/b375f2d))
 
 
 
@@ -16,6 +19,3 @@
 * code refactor ([0aa93b0](https://github.com/beraboume/npm-today.berabou.me/commit/0aa93b0))
 * https -> http ([157ef10](https://github.com/beraboume/npm-today.berabou.me/commit/157ef10))
 * Initial ([045eb99](https://github.com/beraboume/npm-today.berabou.me/commit/045eb99))
-
-
-
