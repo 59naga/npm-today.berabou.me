@@ -1,6 +1,5 @@
 import webpack from 'webpack';
 import path from 'path';
-import CompressionPlugin from 'compression-webpack-plugin';
 
 const filename = 'bundle.min.js';
 const config = {
