@@ -13,3 +13,4 @@ npm-debug.log
 public/**/*.json
 public/**/*.map
 public/**/*.js
+public/**/*.gz

@@ -13,20 +13,24 @@ const app = express();
 app.disable('x-powered-by');
 app.use(cors());
 app.use(compression());
-app.get('/downloads', npmToday({ cwd: publicDir }));
+app.use('/downloads/', npmToday({ cwd: publicDir }));
 app.use(express.static(publicDir));
 
 // Boot
-app.listen(port, () => {
-  let banner = String.raw`
-     _      ____  _          _____ ____  ____  ____ ___  _
-    / \  /|/  __\/ \__/|    /__ __Y  _ \/  _ \/  _ \\  \//
-    | |\ |||  \/|| |\/||_____ / \ | / \|| | \|| / \| \  /
-    | | \|||  __/| |  ||\____\| | | \_/|| |_/|| |-|| / /
-    \_/  \|\_/   \_/  \|      \_/ \____/\____/\_/ \|/_/
-  `;
-  banner += `
-                  http://localhost:${port}
-  `;
-  process.stdout.write(banner);
-});
+if (module.parent === null) {
+  app.listen(port, () => {
+    let banner = String.raw`
+       _      ____  _          _____ ____  ____  ____ ___  _
+      / \  /|/  __\/ \__/|    /__ __Y  _ \/  _ \/  _ \\  \//
+      | |\ |||  \/|| |\/||_____ / \ | / \|| | \|| / \| \  /
+      | | \|||  __/| |  ||\____\| | | \_/|| |_/|| |-|| / /
+      \_/  \|\_/   \_/  \|      \_/ \____/\____/\_/ \|/_/
+    `;
+    banner += `
+                    http://localhost:${port}
+    `;
+    process.stdout.write(banner);
+  });
+}
+
+export default app;
