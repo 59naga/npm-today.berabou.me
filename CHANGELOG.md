@@ -1,9 +1,20 @@
 <a name=""></a>
-#  (2016-03-10)
+#  (2016-03-11)
 
+
+
+
+<a name="0.1.0"></a>
+# 0.1.0 (2016-03-11)
+
+* chore: tweaks the typo and script-hooks ([6dc7e8e](https://github.com/beraboume/npm-today.berabou.me/commit/6dc7e8e))
+* fix: remove no longer used CompressionPlugin ([a7d21b8](https://github.com/beraboume/npm-today.berabou.me/commit/a7d21b8))
+* fix: rename src/client/Store.js -> src/client/store.js ([e1f9087](https://github.com/beraboume/npm-today.berabou.me/commit/e1f9087))
+* feat(client): Add yesterday/tomorrow button ([9efca2d](https://github.com/beraboume/npm-today.berabou.me/commit/9efca2d))
+* docs: add conventional-changelog ([b375f2d](https://github.com/beraboume/npm-today.berabou.me/commit/b375f2d))
+* docs: update changelog ([06b8e0c](https://github.com/beraboume/npm-today.berabou.me/commit/06b8e0c))
 * perf: use gzipped json and bulk queries ([241bb7d](https://github.com/beraboume/npm-today.berabou.me/commit/241bb7d))
 * style: add a:visited with `color #aaa` ([bf9124d](https://github.com/beraboume/npm-today.berabou.me/commit/bf9124d))
-* docs: add conventional-changelog ([b375f2d](https://github.com/beraboume/npm-today.berabou.me/commit/b375f2d))
 
 
 
@@ -19,3 +30,6 @@
 * code refactor ([0aa93b0](https://github.com/beraboume/npm-today.berabou.me/commit/0aa93b0))
 * https -> http ([157ef10](https://github.com/beraboume/npm-today.berabou.me/commit/157ef10))
 * Initial ([045eb99](https://github.com/beraboume/npm-today.berabou.me/commit/045eb99))
+
+
+
