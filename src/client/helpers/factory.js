@@ -83,9 +83,9 @@ export function createResult(packages, options = {}) {
     return listItems.push(<Divider key={`${pkg.name}d`} />);
   });
 
-  if (packages.length) {
+  if (listItems.length) {
     return listItems;
-  } else if (listItems.length) {
+  } else if (packages.length) {
     return <ListItem primaryText="no results found" />;
   }
 
