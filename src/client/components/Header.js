@@ -18,7 +18,7 @@ class Header extends React.Component {
   render() {
     const date = this.props.date;
     const yesterday = moment(date).subtract(1, 'days').format('YYYY-MM-DD');
-    const tomorow = moment(date).add(1, 'days').format('YYYY-MM-DD');
+    const tomorrow = moment(date).add(1, 'days').format('YYYY-MM-DD');
     const npmLastDay = moment.utc().subtract(1, 'days').startOf('day').format('YYYY-MM-DD');
 
     return (
@@ -56,10 +56,10 @@ class Header extends React.Component {
         iconElementRight={
         <RaisedButton
           secondary
-          label={tomorow}
+          label={tomorrow}
           disabled={this.props.packages.length === 0 || date >= npmLastDay}
           onClick={() => {
-            this.context.router.push(`/${tomorow}`);
+            this.context.router.push(`/${tomorrow}`);
           }}
         />
         }
