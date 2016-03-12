@@ -43,7 +43,7 @@ class Footer extends React.Component {
             iconClassName="material-icons"
             iconStyle={{ color: 'white' }}
             tooltip="fookme on github"
-            tooltipPosition="bottom-left"
+            tooltipPosition="top-left"
           >device_hub</IconButton>
         }
       />
