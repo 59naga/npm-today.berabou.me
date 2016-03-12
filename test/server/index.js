@@ -7,7 +7,7 @@ import request from 'supertest';
 import npmToday from '../../src/server';
 
 // specs
-describe('', () => {
+describe('npmToday middleware', () => {
   describe('.fetchTrending via npmToday middleware', () => {
     it('redirect to last-day of api.npmjs.org', (done) => (
       request(npmToday)

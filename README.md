@@ -1,13 +1,16 @@
 [npm-today.berabou.me](http://npm-today.berabou.me/)
 ---
 
+![2016-03-12_15_42_27.png](https://qiita-image-store.s3.amazonaws.com/0/28576/bc58eb20-c009-8ca8-985c-08468520169f.png)
+
 API URL Format
 ---
-* `/downloads` -> `today downloads`
+* `/downloads` -> npm's lastday published download-counts (`.json.gz`)
+* `/downloads/last-day` -> `npm's lastday` (`.txt`)
+* `/downloads/YYYY-MM-DD` -> specify date published package download-counts (`.json.gz`)
 
 Development
 ---
-
 Requirement global
 * NodeJS v5.7.0
 * Npm v3.7.1
