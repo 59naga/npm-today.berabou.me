@@ -1,6 +1,10 @@
 <a name=""></a>
-#  (2016-03-11)
+#  (2016-03-12)
 
+* docs: update `API URL Format` ([c3d6ed5](https://github.com/beraboume/npm-today.berabou.me/commit/c3d6ed5))
+* docs(CHANGELOG): update changelog ([312f9d0](https://github.com/beraboume/npm-today.berabou.me/commit/312f9d0))
+* style(Footer): change to the top-left of iconElementRight>tooltipPosition ([76bf323](https://github.com/beraboume/npm-today.berabou.me/commit/76bf323))
+* fix: change process.env transformer `inline-environment-variables` to `DefinePlugin` ([bcf3bc1](https://github.com/beraboume/npm-today.berabou.me/commit/bcf3bc1))
 
 
 
@@ -30,6 +34,3 @@
 * code refactor ([0aa93b0](https://github.com/beraboume/npm-today.berabou.me/commit/0aa93b0))
 * https -> http ([157ef10](https://github.com/beraboume/npm-today.berabou.me/commit/157ef10))
 * Initial ([045eb99](https://github.com/beraboume/npm-today.berabou.me/commit/045eb99))
-
-
-
