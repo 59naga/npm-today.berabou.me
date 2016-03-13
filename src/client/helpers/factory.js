@@ -34,7 +34,7 @@ export function getMaintainers(pkg) {
 
 
 /**
-* TODO: なんか書く
+* transform the package to <ListItem />
 *
 * @function createResult
 * @param {array<pkg>} packages
@@ -69,6 +69,8 @@ export function createResult(packages, options = {}) {
 
     listItems.push(
       <ListItem
+        {...pkg}
+
         key={pkg.name}
         value={i}
         primaryText={pkg.name}
