@@ -1,5 +1,6 @@
 // dependencies
 import assert from 'power-assert';
+import dispatchAsync from './utils/dispatchAsync';
 
 // target
 import { initialState, createPromiseStore } from '../../src/client/store';
@@ -14,37 +15,27 @@ describe('redux-store', () => {
   describe('type: serach', () => {
     const type = 'search';
 
-    it('payload: accepts only `query`', (done) => {
+    it('payload: accepts only `query`', () => {
       const query = 'nanka';
 
-      setTimeout(() => {
-        store.dispatch({
-          type,
-          payload: { query, dummy: 'kaboom' },
-        });
-      });
-
-      const unsubscribe = store.subscribe(() => {
+      return dispatchAsync(store, {
+        type,
+        payload: { query, dummy: 'kaboom' },
+      })
+      .then(() => {
         const state = store.getState();
 
         assert.deepEqual(state, Object.assign({}, initialState, { query }));
-
-        unsubscribe();
-        done();
       });
     });
 
-    it('payload: if missing `query`, should throw an TypeError', (done) => {
-      setTimeout(() => {
-        try {
-          store.dispatch({
-            type,
-          });
-        } catch (error) {
-          assert(error instanceof TypeError);
-          assert(error.message === `invalid argument type: query is ${typeof query}`);
-          done();
-        }
+    it('payload: if missing `query`, should throw an TypeError', () => {
+      return dispatchAsync(store, {
+        type,
+      })
+      .catch((error) => {
+        assert(error instanceof TypeError);
+        assert(error.message === `invalid argument type: query is ${typeof query}`);
       });
     });
   });
@@ -52,37 +43,26 @@ describe('redux-store', () => {
   describe('type: update', () => {
     const type = 'update';
 
-    it('payload: accepts only `packages`', (done) => {
+    it('payload: accepts only `packages`', () => {
       const packages = ['nanka'];
 
-      setTimeout(() => {
-        store.dispatch({
-          type,
-          payload: { packages, dummy: 'kaboom' },
-        });
-      });
-
-      const unsubscribe = store.subscribe(() => {
+      return dispatchAsync(store, {
+        type,
+        payload: { packages, dummy: 'kaboom' },
+      })
+      .then(() => {
         const state = store.getState();
-
         assert.deepEqual(state, Object.assign({}, initialState, { packages }));
-
-        unsubscribe();
-        done();
       });
     });
 
-    it('payload: if missing `packages`, should throw an TypeError', (done) => {
-      setTimeout(() => {
-        try {
-          store.dispatch({
-            type,
-          });
-        } catch (error) {
-          assert(error instanceof TypeError);
-          assert(error.message === `invalid argument type: packages is ${typeof packages}`);
-          done();
-        }
+    it('payload: if missing `packages`, should throw an TypeError', () => {
+      return dispatchAsync(store, {
+        type,
+      })
+      .catch((error) => {
+        assert(error instanceof TypeError);
+        assert(error.message === `invalid argument type: packages is ${typeof packages}`);
       });
     });
   });
@@ -90,37 +70,26 @@ describe('redux-store', () => {
   describe('type: redirect', () => {
     const type = 'redirect';
 
-    it('payload: accepts only `date`', (done) => {
+    it('payload: accepts only `date`', () => {
       const date = '1990-09-18';
 
-      setTimeout(() => {
-        store.dispatch({
-          type,
-          payload: { date, dummy: 'kaboom' },
-        });
-      });
-
-      const unsubscribe = store.subscribe(() => {
+      return dispatchAsync(store, {
+        type,
+        payload: { date, dummy: 'kaboom' },
+      })
+      .then(() => {
         const state = store.getState();
-
         assert.deepEqual(state, Object.assign({}, initialState, { date }));
-
-        unsubscribe();
-        done();
       });
     });
 
-    it('payload: if missing `date`, should throw an TypeError', (done) => {
-      setTimeout(() => {
-        try {
-          store.dispatch({
-            type,
-          });
-        } catch (error) {
-          assert(error instanceof TypeError);
-          assert(error.message === "invalid argument type: date isnt match 'YYYY-MM-DD'");
-          done();
-        }
+    it('payload: if missing `date`, should throw an TypeError', () => {
+      return dispatchAsync(store, {
+        type,
+      })
+      .catch((error) => {
+        assert(error instanceof TypeError);
+        assert(error.message === "invalid argument type: date isnt match 'YYYY-MM-DD'");
       });
     });
   });

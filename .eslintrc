@@ -10,5 +10,6 @@ env:
 
 rules:
   new-cap: [2, {"capIsNewExceptions": ["express.Router"]}]
+  arrow-body-style: [1]
   react/jsx-no-bind: [0]
   react/prefer-stateless-function: [1]
