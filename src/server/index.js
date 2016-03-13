@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import compression from 'compression';
 import npmToday from './middleware';
+import ssr from './ssr';
 import path from 'path';
 
 // Environment
@@ -13,8 +14,12 @@ const app = express();
 app.disable('x-powered-by');
 app.use(cors());
 app.use(compression());
+app.use(ssr());
 app.use('/downloads/', npmToday({ cwd: publicDir }));
 app.use(express.static(publicDir));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(publicDir, 'index.html'));
+});
 
 // Boot
 if (module.parent === null) {

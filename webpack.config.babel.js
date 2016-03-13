@@ -27,6 +27,9 @@ const config = {
     port: 59798,
     quiet: true,
     contentBase: 'public',
+
+    // see https://webpack.github.io/docs/webpack-dev-server.html#api
+    historyApiFallback: true,
   },
 };
 

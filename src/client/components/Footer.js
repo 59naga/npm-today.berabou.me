@@ -7,13 +7,26 @@ import { TextField } from 'material-ui';
 
 class Footer extends React.Component {
   static propTypes = {
-    search: React.PropTypes.func.isRequired,
+    location: React.PropTypes.object.isRequired,
+    query: React.PropTypes.object,
+  }
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired,
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
-    this.props.search(this.refs.query.input.value);
+    this.context.router.replace({
+      pathname: this.props.location.pathname,
+      query: Object.assign(
+        {},
+        this.props.location.query,
+        {
+          keyword: this.refs.keyword.input.value,
+        }
+      ),
+    });
   }
   render() {
     return (
@@ -27,11 +40,13 @@ class Footer extends React.Component {
             <a href="https://registry.npmjs.org/-/all/static/today.json"></a>
             <TextField
               autoFocus
-              ref="query"
+              ref="keyword"
               style={{ margin: '0 2em' }}
               hintStyle={{ color: 'rgba(255,255,255,.5)' }}
               hintText="filter by name, authors, keywords..."
               inputStyle={{ color: 'white' }}
+
+              defaultValue={this.props.query ? this.props.query.keyword : null}
             />
           </form>
         }
@@ -53,14 +68,4 @@ class Footer extends React.Component {
 
 export default connect(
   (state) => state,
-  {
-    search(query) {
-      return {
-        type: 'search',
-        payload: {
-          query,
-        },
-      };
-    },
-  },
 )(Footer);

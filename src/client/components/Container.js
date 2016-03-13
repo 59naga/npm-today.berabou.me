@@ -13,6 +13,8 @@ import axios from 'axios';
 
 class Container extends React.Component {
   static propTypes = {
+    date: React.PropTypes.string,
+    location: React.PropTypes.object.isRequired,
     routeParams: React.PropTypes.object.isRequired,
   }
   static childContextTypes = {
@@ -33,9 +35,11 @@ class Container extends React.Component {
   }
 
   componentWillMount() {
-    let date = store.getState().date;
+    // routeParams.dateでデータ取得を試みる
+    // store.dispatch(this.update(this.props.routeParams.date, conditions));
 
-    store.dispatch(this.update(this.props.routeParams.date));
+    // routeParams.dateとstore.dateが一致しない時、packagesを更新する
+    let date = null;
     store.subscribe(() => {
       if (date !== store.getState().date) {
         store.dispatch(this.update(store.getState().date));
@@ -43,9 +47,28 @@ class Container extends React.Component {
 
       date = store.getState().date;
     });
+
+    // 初期化。日付と検索条件で描写を試みる
+    store.dispatch({
+      type: 'redirect',
+      payload: {
+        date: this.props.routeParams.date,
+        query: this.props.location.query,
+        packages: [],
+      },
+    });
   }
   componentWillReceiveProps(nextProps) {
-    store.dispatch({
+    if (this.props.location.query.keyword !== nextProps.location.query.keyword) {
+      return store.dispatch({
+        type: 'search',
+        payload: {
+          query: nextProps.location.query,
+        },
+      });
+    }
+
+    return store.dispatch({
       type: 'redirect',
       payload: {
         date: nextProps.routeParams.date,
@@ -83,9 +106,9 @@ class Container extends React.Component {
   render() {
     return (
       <div>
-        <Header store={store} />
-        <Trending store={store} />
-        <Footer store={store} />
+        <Header {...this.props} store={store} />
+        <Trending {...this.props} store={store} />
+        <Footer {...this.props} store={store} />
       </div>
     );
   }

@@ -1,4 +1,4 @@
-// Dependencies
+// dependencies
 import { jsdom } from 'jsdom';
 
 // see:
@@ -9,7 +9,7 @@ global.window = document.defaultView;
 
 // https://github.com/rofrischmann/inline-style-prefixer/issues/60#issuecomment-185734503
 if (typeof console.debug === 'undefined') {
-  console.debug = ()=>{
+  console.debug = () => {
     // ignore "Download the React DevTools for a better development experience"
   };
 }

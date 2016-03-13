@@ -1,5 +1,5 @@
 import React from 'react';
-import objectAssign from 'object-assign';
+import update from 'react-addons-update';
 
 import { ListItem } from 'material-ui';
 import { Divider } from 'material-ui';
@@ -39,13 +39,19 @@ export function getMaintainers(pkg) {
 * @function createResult
 * @param {array<pkg>} packages
 * @param {object} [options]
-* @param {string} [options.query='']
+* @param {string} [options.query.keyword='']
 * @return {array<MaterialUI:ListItem>} listItems
 */
 export function createResult(packages, options = {}) {
-  const opts = objectAssign({
-    query: '',
-  }, options);
+  const opts = update({
+    query: {
+      keyword: '',
+    },
+  }, {
+    query: {
+      $merge: options.query || {},
+    },
+  });
 
   let total = 0;
   let count = 0;
@@ -55,11 +61,11 @@ export function createResult(packages, options = {}) {
     if (pkg.downloads <= 0) {
       return undefined;
     }
-    if (opts.query) {
-      const matchName = pkg.name.match(opts.query) !== null;
-      const matchDescription = (pkg.description || '').match(opts.query) !== null;
-      const matchKeyword = (pkg.keywords || []).join(', ').match(opts.query) !== null;
-      const matchMaintaner = getMaintainers(pkg).match(opts.query) !== null;
+    if (opts.query.keyword) {
+      const matchName = pkg.name.match(opts.query.keyword) !== null;
+      const matchDescription = (pkg.description || '').match(opts.query.keyword) !== null;
+      const matchKeyword = (pkg.keywords || []).join(', ').match(opts.query.keyword) !== null;
+      const matchMaintaner = getMaintainers(pkg).match(opts.query.keyword) !== null;
       const unMatch = (matchName || matchDescription || matchKeyword || matchMaintaner) === false;
       if (unMatch) {
         return undefined;

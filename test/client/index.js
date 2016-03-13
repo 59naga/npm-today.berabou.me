@@ -8,7 +8,7 @@ import assert from 'power-assert';
 import { CircularProgress } from 'material-ui';
 
 // private
-const dispatchUpdateAndSearch = (store, packages, query) => (
+const dispatchUpdateAndSearch = (store, packages, keyword) => (
   dispatchAsync(store, {
     type: 'update',
     payload: {
@@ -19,7 +19,7 @@ const dispatchUpdateAndSearch = (store, packages, query) => (
     dispatchAsync(store, {
       type: 'search',
       payload: {
-        query,
+        query: { keyword },
       },
     })
   ))

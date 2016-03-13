@@ -11,7 +11,7 @@
     "test:server": "mocha test/server/index.js --compilers js:espower-babel/guess --timeout 50000",
     "build": "npm-run-all --parallel build:*",
     "build:client": "webpack # compile src/client to public/bundle.min.js",
-    "build:server": "babel src/server --out-dir lib/server",
+    "build:server": "babel src --out-dir lib",
     "build-dev": "npm-run-all --parallel build-dev:*",
     "build-dev:client": "webpack",
     "dev": "npm-run-all --parallel dev:*",
@@ -23,10 +23,12 @@
   "dependencies": {
     "axios": "^0.9.1",
     "bluebird": "^3.3.3",
+    "cheerio": "^0.20.0",
     "compression": "^1.6.1",
     "cors": "^2.7.1",
     "express": "^4.13.4",
-    "npm-count": "^0.1.0"
+    "npm-count": "^0.1.0",
+    "victorica": "^0.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.6.5",

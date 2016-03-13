@@ -10,6 +10,7 @@ class Header extends React.Component {
   static propTypes = {
     date: React.PropTypes.string,
     packages: React.PropTypes.array,
+    location: React.PropTypes.object,
   }
   static contextTypes = {
     router: React.PropTypes.object.isRequired,
@@ -40,7 +41,10 @@ class Header extends React.Component {
             label={yesterday}
             disabled={this.props.packages.length === 0}
             onClick={() => {
-              this.context.router.push(`/${yesterday}`);
+              this.context.router.push({
+                pathname: `/${yesterday}`,
+                query: this.props.location.query,
+              });
             }}
           />
         }
@@ -59,7 +63,10 @@ class Header extends React.Component {
           label={tomorrow}
           disabled={this.props.packages.length === 0 || date >= npmLastDay}
           onClick={() => {
-            this.context.router.push(`/${tomorrow}`);
+            this.context.router.push({
+              pathname: `/${tomorrow}`,
+              query: this.props.location.query,
+            });
           }}
         />
         }
