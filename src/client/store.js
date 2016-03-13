@@ -20,11 +20,22 @@ export function createPromiseStore() {
 
       case 'update':
         {
-          const { packages } = action.payload || {};
+          const { date, packages } = action.payload || {};
+          const payload = {};
+
+          // optional
+          if (date && date.match(/\d{4}-\d{2}-\d{2}/) === null) {
+            throw new TypeError("invalid argument type: date isnt match 'YYYY-MM-DD'");
+          }
+          payload.date = date;
+
+          // required
           if (packages instanceof Array === false) {
             throw new TypeError(`invalid argument type: packages is ${typeof packages}`);
           }
-          return update(state, { $merge: { packages } });
+          payload.packages = packages;
+
+          return update(state, { $merge: payload });
         }
 
       case 'redirect':

@@ -43,16 +43,30 @@ describe('redux-store', () => {
   describe('type: update', () => {
     const type = 'update';
 
-    it('payload: accepts only `packages`', () => {
+    it('payload: accepts only `date` and `packages`', () => {
       const packages = ['nanka'];
 
       return dispatchAsync(store, {
         type,
+        date: '1990-09-18',
         payload: { packages, dummy: 'kaboom' },
       })
       .then(() => {
         const state = store.getState();
         assert.deepEqual(state, Object.assign({}, initialState, { packages }));
+      });
+    });
+
+    it('payload: if invalid `date`, should throw an TypeError', () => {
+      const packages = ['nanka'];
+
+      return dispatchAsync(store, {
+        type,
+        payload: { packages, date: 'fdsafdsafdsfdsa' },
+      })
+      .catch((error) => {
+        assert(error instanceof TypeError);
+        assert(error.message === "invalid argument type: date isnt match 'YYYY-MM-DD'");
       });
     });
 
