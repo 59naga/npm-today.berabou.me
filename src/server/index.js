@@ -10,6 +10,11 @@ import fs from 'fs';
 const port = process.env.PORT || 59798;
 const publicDir = path.join(process.cwd(), 'public');
 const cacheDir = path.join(publicDir, 'cache');
+if (process.env.NODE_ENV === 'production') {
+  process.env.URL = 'http://npm-today.berabou.me';
+} else {
+  process.env.URL = `http://localhost:${port}`;
+}
 
 // Routes
 const app = express();

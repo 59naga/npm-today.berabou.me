@@ -11,9 +11,6 @@ import Footer from './Footer';
 
 import axios from 'axios';
 
-// environment
-const url = process.env.NODE_ENV === 'production' ? 'downloads' : 'http://npm-today.berabou.me/downloads';
-
 class Container extends React.Component {
   static propTypes = {
     date: React.PropTypes.string,
@@ -49,6 +46,9 @@ class Container extends React.Component {
   }
 
   update(props) {
+    // server -> production ? 'http://npm-today.berabou.me/downloads' : 'http://localhost:{process.env.PORT}/downloads'
+    // client -> webpackDev ? '/downloads' : 'http://npm-today.berabou.me/downloads'
+    const url = process.env.NODE_ENV === 'production' ? `${process.env.URL}/downloads` : 'http://npm-today.berabou.me/downloads';
     const { routeParams, location } = props;
 
     if (this.props.location.query.keyword !== location.query.keyword) {
