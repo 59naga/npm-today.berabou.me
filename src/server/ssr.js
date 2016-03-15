@@ -53,7 +53,7 @@ export default (options) => (req, res, next) => {
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
-      const cacheName = `${paramCase(req.url)}.html`;
+      const cacheName = `${paramCase(req.url) || 'index'}.html`;
       const cachePath = path.join(opts.cwd, cacheName);
 
       fs.statAsync(cachePath)
