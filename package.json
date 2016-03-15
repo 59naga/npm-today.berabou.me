@@ -3,7 +3,7 @@
   "main": "lib/server/index.js",
   "private": true,
   "scripts": {
-    "start": "npm run build:server && node lib/server/index.js",
+    "start": "node lib/server/index.js",
     "watch:client": "npm run test:client -- --watch",
     "cover": "nyc --reporter=lcov --reporter=text npm run test",
     "test": "npm-run-all --parallel test:*",
@@ -27,8 +27,14 @@
     "compression": "^1.6.1",
     "cors": "^2.7.1",
     "express": "^4.13.4",
+    "mkdirp": "^0.5.1",
     "npm-count": "^0.1.0",
-    "victorica": "^0.0.2"
+    "param-case": "^1.1.2",
+    "react-dom": "^0.14.7",
+    "react-redux": "^4.4.0",
+    "react-router": "^2.0.1",
+    "redux": "^3.3.1",
+    "redux-hermit": "^0.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.6.5",
@@ -57,12 +63,7 @@
     "react": "^0.14.7",
     "react-addons-test-utils": "^0.14.7",
     "react-addons-update": "^0.14.7",
-    "react-dom": "^0.14.7",
-    "react-redux": "^4.4.0",
-    "react-router": "^2.0.1",
     "react-tap-event-plugin": "^0.2.2",
-    "redux": "^3.3.1",
-    "redux-promise": "^0.5.1",
     "style-loader": "^0.13.0",
     "stylus-loader": "^1.5.1",
     "supertest": "^1.2.0",

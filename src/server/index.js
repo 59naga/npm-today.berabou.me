@@ -4,18 +4,23 @@ import compression from 'compression';
 import npmToday from './middleware';
 import ssr from './ssr';
 import path from 'path';
+import fs from 'fs';
 
 // Environment
 const port = process.env.PORT || 59798;
 const publicDir = path.join(process.cwd(), 'public');
+const cacheDir = path.join(publicDir, 'cache');
 
 // Routes
 const app = express();
 app.disable('x-powered-by');
 app.use(cors());
 app.use(compression());
-app.use(ssr());
-app.use('/downloads/', npmToday({ cwd: publicDir }));
+app.use(ssr({
+  cwd: cacheDir,
+  html: fs.readFileSync(path.join(publicDir, 'index.html'), 'utf8'),
+}));
+app.use('/downloads/', npmToday({ cwd: cacheDir }));
 app.use(express.static(publicDir));
 app.get('*', (req, res) => {
   res.sendFile(path.join(publicDir, 'index.html'));

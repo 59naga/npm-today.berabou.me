@@ -121,6 +121,9 @@ export default (options = {}) => {
       })
     ));
   });
+  middleware.get('/*', (req, res) => {
+    res.status(404).end(`Cannot GET ${req.originalUrl}`);
+  });
 
   return middleware;
 };

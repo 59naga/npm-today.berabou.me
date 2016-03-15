@@ -11,6 +11,9 @@ import Footer from './Footer';
 
 import axios from 'axios';
 
+// environment
+const url = process.env.NODE_ENV === 'production' ? 'downloads' : 'http://npm-today.berabou.me/downloads';
+
 class Container extends React.Component {
   static propTypes = {
     date: React.PropTypes.string,
@@ -19,6 +22,9 @@ class Container extends React.Component {
   }
   static childContextTypes = {
     muiTheme: React.PropTypes.object,
+  }
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired,
   }
 
   getChildContext() {
@@ -35,72 +41,59 @@ class Container extends React.Component {
   }
 
   componentWillMount() {
-    // routeParams.dateでデータ取得を試みる
-    // store.dispatch(this.update(this.props.routeParams.date, conditions));
-
-    // routeParams.dateとstore.dateが一致しない時、packagesを更新する
-    let date = null;
-    store.subscribe(() => {
-      if (date !== store.getState().date) {
-        store.dispatch(this.update(store.getState().date));
-      }
-
-      date = store.getState().date;
-    });
-
-    // 初期化。日付と検索条件で描写を試みる
-    store.dispatch({
-      type: 'redirect',
-      payload: {
-        date: this.props.routeParams.date,
-        query: this.props.location.query,
-        packages: [],
-      },
-    });
+    this.update(this.props);
   }
+
   componentWillReceiveProps(nextProps) {
-    if (this.props.location.query.keyword !== nextProps.location.query.keyword) {
+    this.update(nextProps);
+  }
+
+  update(props) {
+    const { routeParams, location } = props;
+
+    if (this.props.location.query.keyword !== location.query.keyword) {
       return store.dispatch({
         type: 'search',
         payload: {
-          query: nextProps.location.query,
+          query: location.query,
         },
       });
     }
 
-    return store.dispatch({
-      type: 'redirect',
-      payload: {
-        date: nextProps.routeParams.date,
-        packages: [],
-      },
-    });
-  }
-
-  update(date = 'last-day') {
-    const url = process.env.NODE_ENV === 'production' ? 'downloads' : 'http://npm-today.berabou.me/downloads';
-    const uri = `${url}/${date}`;
-
-    return axios(uri) // fetch `/downloads` in ../server/index.js
-    .then((response) => {
-      if (typeof response.data === 'string') {
-        return {
-          type: 'redirect',
-          payload: {
-            date: response.data,
-            packages: [],
-          },
-        };
+    if (routeParams.date) {
+      // TODO: invalid date extra validation
+      if (routeParams.date.match(/\d{4}-\d{2}-\d{2}/) === null) {
+        return this.context.router.push('/404');
       }
 
-      return {
-        type: 'update',
-        payload: {
-          date,
-          packages: response.data,
-        },
-      };
-    });
+      return store.dispatch(
+        axios(`${url}/${routeParams.date}`)
+        .then(({ data: packages }) => ({
+          type: 'update',
+          payload: {
+            date: routeParams.date,
+            query: location.query,
+            packages,
+          },
+        }))
+      );
+    }
+
+    // fetch packages after fetch last-day
+    return store.dispatch(
+      axios(`${url}/last-day`)
+      .then(({ data: date }) => (
+        axios(`${url}/${date}`)
+        .then((response) => ({
+          type: 'update',
+          payload: {
+            date,
+            query: location.query,
+            packages: response.data,
+          },
+        }))
+      ))
+    );
   }
 
   render() {
