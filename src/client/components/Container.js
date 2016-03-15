@@ -1,21 +1,28 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import Promise from 'bluebird';
 
 import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
 import * as Colors from 'material-ui/lib/styles/colors';
 import ColorManipulator from 'material-ui/lib/utils/color-manipulator';
 
-import store from '../store';
 import Header from './Header';
 import Trending from './Trending';
 import Footer from './Footer';
 
 import axios from 'axios';
 
+// server -> production ? 'http://npm-today.berabou.me/downloads' : 'http://localhost:{process.env.PORT}/downloads'
+// client -> webpackDev ? '/downloads' : 'http://npm-today.berabou.me/downloads'
+const url = process.env.NODE_ENV === 'production' ? `${process.env.URL}/downloads` : 'http://npm-today.berabou.me/downloads';
+
 class Container extends React.Component {
   static propTypes = {
-    date: React.PropTypes.string,
+    dispatch: React.PropTypes.func.isRequired,
     location: React.PropTypes.object.isRequired,
     routeParams: React.PropTypes.object.isRequired,
+    date: React.PropTypes.string,
+    query: React.PropTypes.object,
   }
   static childContextTypes = {
     muiTheme: React.PropTypes.object,
@@ -37,22 +44,45 @@ class Container extends React.Component {
     };
   }
 
+  // urlの日付(:date)とキーワード(?keyword)をstateとして優先する
+  // 日付の指定がなければ最新日を取得後、storeのstateとして使う
   componentWillMount() {
-    this.update(this.props);
+    let promise;
+    if (this.props.routeParams.date) {
+      promise = Promise.resolve(this.props.routeParams.date);
+    } else {
+      promise = axios(`${url}/last-day`).then((response) => response.data);
+    }
+
+    this.props.dispatch({
+      type: 'search',
+      payload: {
+        query: this.props.location.query,
+      },
+    });
+
+    this.props.dispatch(
+      promise.then((date) =>
+        axios(`${url}/${date}`)
+        .then((response) => ({
+          type: 'update',
+          payload: {
+            date,
+            query: this.props.location.query,
+            packages: response.data,
+          },
+        })
+      ))
+    );
   }
 
+  // urlが変更されたら、storeに反映する。
   componentWillReceiveProps(nextProps) {
-    this.update(nextProps);
-  }
+    const { routeParams, location } = nextProps;
 
-  update(props) {
-    // server -> production ? 'http://npm-today.berabou.me/downloads' : 'http://localhost:{process.env.PORT}/downloads'
-    // client -> webpackDev ? '/downloads' : 'http://npm-today.berabou.me/downloads'
-    const url = process.env.NODE_ENV === 'production' ? `${process.env.URL}/downloads` : 'http://npm-today.berabou.me/downloads';
-    const { routeParams, location } = props;
-
-    if (this.props.location.query.keyword !== location.query.keyword) {
-      return store.dispatch({
+    // router.pushでurlの検索ワード(?keyword)の変更があったとき
+    if (location.query && location.query.keyword !== this.props.location.query.keyword) {
+      return this.props.dispatch({
         type: 'search',
         payload: {
           query: location.query,
@@ -60,51 +90,47 @@ class Container extends React.Component {
       });
     }
 
-    if (routeParams.date) {
+    // router.pushでurlの日付(:date)の変更があったとき
+    if (routeParams.date && routeParams.date !== this.props.routeParams.date) {
       // TODO: invalid date extra validation
       if (routeParams.date.match(/\d{4}-\d{2}-\d{2}/) === null) {
         return this.context.router.push('/404');
       }
 
-      return store.dispatch(
+      // re-show CircularProgress
+      this.props.dispatch({
+        type: 'update',
+        payload: {
+          packages: [],
+        },
+      });
+
+      return this.props.dispatch(
         axios(`${url}/${routeParams.date}`)
         .then(({ data: packages }) => ({
           type: 'update',
           payload: {
             date: routeParams.date,
-            query: location.query,
             packages,
           },
         }))
       );
     }
 
-    // fetch packages after fetch last-day
-    return store.dispatch(
-      axios(`${url}/last-day`)
-      .then(({ data: date }) => (
-        axios(`${url}/${date}`)
-        .then((response) => ({
-          type: 'update',
-          payload: {
-            date,
-            query: location.query,
-            packages: response.data,
-          },
-        }))
-      ))
-    );
+    return true;
   }
 
   render() {
     return (
       <div>
-        <Header {...this.props} store={store} />
-        <Trending {...this.props} store={store} />
-        <Footer {...this.props} store={store} />
+        <Header {...this.props} />
+        <Trending {...this.props} />
+        <Footer {...this.props} />
       </div>
     );
   }
 }
 
-export default Container;
+export default connect(
+  state => state,
+)(Container);

@@ -7,17 +7,19 @@ import update from 'react-addons-update';
 export const initialState = {
   packages: [],
 };
-export function createPromiseStore() {
-  return createStore((state, action) => {
-    switch (action.type) {
-      case 'search':
-      case 'update':
-        return update(state, { $merge: action.payload });
+export default () => (
+  createStore(
+    (state, action) => {
+      switch (action.type) {
+        case 'search':
+        case 'update':
+          return update(state, { $merge: action.payload });
 
-      default:
-        return state;
-    }
-  }, initialState, applyMiddleware(hermit));
-}
-
-export default createPromiseStore();
+        default:
+          return state;
+      }
+    },
+    initialState,
+    applyMiddleware(hermit),
+  )
+);

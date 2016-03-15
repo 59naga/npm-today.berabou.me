@@ -1,7 +1,9 @@
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
+import { Provider } from 'react-redux';
 import routes from '../client/routes';
+import createStore from '../client/store';
 import Promise from 'bluebird';
 import fsOrigin from 'fs';
 import path from 'path';
@@ -56,15 +58,21 @@ export default (options) => (req, res, next) => {
       const cacheName = `${paramCase(req.url) || 'index'}.html`;
       const cachePath = path.join(opts.cwd, cacheName);
 
+      const provider = (
+        <Provider store={createStore()}>
+          <RouterContext {...renderProps} />
+        </Provider>
+      );
+
       fs.statAsync(cachePath)
       .then(() => res.sendFile(cachePath))
       .catch(() => (
         createSession(() => {
-          renderToStaticMarkup(<RouterContext {...renderProps} />);
-        }, { timeout: 8000 })
+          renderToStaticMarkup(provider);
+        }, { timeout: 5000 })
         .then(() => {
           const $ = cheerio.load(opts.html);
-          const innerHTML = renderToStaticMarkup(<RouterContext {...renderProps} />);
+          const innerHTML = renderToStaticMarkup(provider);
 
           $('#container').html(innerHTML);
           $('*[style]').attr('style', null);
