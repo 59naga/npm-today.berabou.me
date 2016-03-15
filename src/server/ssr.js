@@ -61,7 +61,7 @@ export default (options) => (req, res, next) => {
       .catch(() => (
         createSession(() => {
           renderToStaticMarkup(<RouterContext {...renderProps} />);
-        }, { timeout: 5000 })
+        }, { timeout: 8000 })
         .then(() => {
           const $ = cheerio.load(opts.html);
           const innerHTML = renderToStaticMarkup(<RouterContext {...renderProps} />);
@@ -86,6 +86,9 @@ export default (options) => (req, res, next) => {
               // ignore
             }
           }, opts.expire);
+        })
+        .catch((reason) => {
+          res.status(500).send(reason.message);
         })
       ));
     } else {
