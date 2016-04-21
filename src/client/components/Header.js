@@ -29,9 +29,9 @@ class Header extends React.Component {
           zIndex: 999,
           display: 'flex',
           position: 'fixed',
-          top: '0',
-          left: '0',
-          right: '0',
+          top: 0,
+          left: 0,
+          right: 0,
           background: '#bbb',
         }}
 
