@@ -73,13 +73,16 @@ export function createResult(packages, options = {}) {
     }
     count++;
 
+    // TODO: Case of multiple values ``{"6.7.7":"latest","6.7.2":"stable"}`
+    const latest = Object.keys(pkg.versions)[0];
+
     listItems.push(
       <ListItem
         {...pkg}
 
         key={pkg.name}
         value={i}
-        primaryText={pkg.name}
+        primaryText={`${pkg.name}@${latest}`}
         secondaryText={<p>{pkg.description}</p>}
         leftAvatar={<div className="numeric">{(i + 1).toLocaleString()}</div>}
         rightAvatar={<div>{pkg.downloads.toLocaleString()}</div>}
