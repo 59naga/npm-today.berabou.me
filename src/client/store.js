@@ -2,8 +2,6 @@ import { createStore, applyMiddleware } from 'redux';
 import hermit from 'redux-hermit';
 import update from 'react-addons-update';
 
-// TODO: flowtypeつかう
-
 export const initialState = {
   packages: [],
 };
