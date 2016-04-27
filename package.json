@@ -68,7 +68,7 @@
     "react-addons-test-utils": "^15.0.1",
     "react-tap-event-plugin": "^1.0.0",
     "style-loader": "^0.13.0",
-    "stylus": "^0.54.4",
+    "stylus": "^0.54.5",
     "stylus-loader": "^2.0.0",
     "supertest": "^1.2.0",
     "wait-on": "^1.4.0",
