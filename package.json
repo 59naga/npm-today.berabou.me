@@ -21,7 +21,7 @@
     "changelog": "conventional-changelog --release-count 0 --infile CHANGELOG.md --same-file"
   },
   "dependencies": {
-    "axios": "^0.10.0",
+    "axios": "^0.11.0",
     "bluebird": "^3.3.3",
     "cheerio": "^0.20.0",
     "compression": "^1.6.1",
