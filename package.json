@@ -58,7 +58,7 @@
     "eslint-plugin-mocha": "^2.0.0",
     "eslint-plugin-react": "^5.0.1",
     "espower-babel": "^4.0.1",
-    "jsdom": "^8.1.0",
+    "jsdom": "^8.4.1",
     "material-ui": "0.15.0-alpha.1",
     "moment": "^2.12.0",
     "npm-run-all": "^1.8.0",
