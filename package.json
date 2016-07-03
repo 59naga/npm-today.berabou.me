@@ -51,7 +51,7 @@
     "conventional-changelog-cli": "^1.1.1",
     "css-loader": "^0.23.1",
     "enzyme": "^2.1.0",
-    "eslint": "^2.8.0",
+    "eslint": "^2.9.0",
     "eslint-config-airbnb": "^7.0.0",
     "eslint-plugin-import": "^1.6.0",
     "eslint-plugin-jsx-a11y": "^1.0.2",
